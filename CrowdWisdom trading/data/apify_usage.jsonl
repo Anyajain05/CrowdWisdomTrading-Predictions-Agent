@@ -1,8 +1,0 @@
-{"ts": "2026-04-22T17:33:20.582091+00:00", "asset": "BTC", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.13, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:33:23.049846+00:00", "asset": "ETH", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.34, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:34:39.060619+00:00", "asset": "BTC", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.37, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:34:41.332234+00:00", "asset": "ETH", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.09, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:36:21.227954+00:00", "asset": "BTC", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.31, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:36:23.501789+00:00", "asset": "ETH", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.08, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:39:36.808779+00:00", "asset": "BTC", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.12, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
-{"ts": "2026-04-22T17:39:39.071025+00:00", "asset": "ETH", "source": "binance_fallback", "rows": 1000, "success": true, "duration_s": 1.04, "cumulative_cu": 0.0, "cumulative_cost_usd": 0.0}
