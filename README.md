@@ -1,189 +1,104 @@
-<h1 align="center">📈 CrowdWisdomTrading</h1>
-<h3 align="center">⚡ Multi-Agent Crypto Prediction & Trading Intelligence System</h3>
+# CrowdWisdomTrading Predictions Agent
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Multi--Agent-System-purple?style=for-the-badge">
-  <img src="https://img.shields.io/badge/LLM-Synthesis-orange?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Risk-Kelly%20Criterion-blue?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Dashboard-Streamlit-success?style=for-the-badge">
-</p>
+Python backend for the CrowdWisdomTrading internship assignment.
 
-<p align="center">
-  <b>🔍 Scan → 📦 Fetch → 🔮 Predict → 💰 Size → 📊 Evaluate</b>
-</p>
+## Assignment coverage
 
----
+This project now includes:
 
-## 🧠 What is CrowdWisdomTrading?
+- Agent 1: search/scanner for BTC and ETH next-5-minute markets on Polymarket and Kalshi
+- Agent 2: Apify-based OHLCV fetcher for the latest 1000 bars, with Binance fallback
+- Agent 3: next-bar UP/DOWN prediction using the local Kronos repo from `third_party/Kronos-master`
+- Agent 4: Kelly Criterion risk sizing
+- Agent 5: feedback loop with persisted prediction history, bankroll updates, rolling accuracy, and 15-minute vs 3x 5-minute arbitrage checks
+- User visibility via Streamlit dashboard
+- Hermes Agent framework integration for orchestration/synthesis
 
-> A **multi-agent trading intelligence pipeline** that combines  
-> **prediction markets + ML models + risk management + LLM reasoning**.
+## Real framework usage
 
-Unlike typical trading bots:
-- ✅ Uses **market consensus (Polymarket + Kalshi)**
-- ✅ Applies **ML-based predictions**
-- ✅ Executes **risk-aware position sizing**
-- ✅ Tracks **accuracy & arbitrage opportunities**
+This repo does not just say "Hermes-style" anymore. It includes a real Hermes Agent integration through [tools/hermes_tools.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/tools/hermes_tools.py), which imports `AIAgent` from the official Hermes Python library path documented by Nous Research.
 
----
+Official Hermes Python library docs:
+- [Using Hermes as a Python Library](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/python-library.md)
+- [Hermes Agent repo](https://github.com/nousresearch/hermes-agent)
 
-## ⚙️ System Architecture
+Important note:
+- Hermes Agent officially supports Linux, macOS, WSL2, and Termux
+- Native Windows is not officially supported by Hermes, so on Windows the recommended runtime is WSL2
 
-```mermaid
-flowchart LR
+## Kronos integration
 
-    A[Market Scanner] --> B[Data Fetcher]
-    B --> C[Prediction Model]
-    C --> D[Risk Manager]
-    D --> E[Feedback Loop]
-    E --> F[LLM Synthesis]
-```
+The Kronos predictor uses your local extracted archive at:
 
----
+- [third_party/Kronos-master](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/third_party/Kronos-master)
 
-## 🤖 Agent Pipeline (5-Agent System)
+Agent 3 loads:
 
-### 🔍 Agent 1 — Market Scanner
-- Reads prediction markets (Polymarket + Kalshi)
-- Extracts consensus probabilities
+- `KronosTokenizer`
+- `Kronos`
+- `KronosPredictor`
 
----
+from the local Kronos repo and converts the next forecasted close into:
 
-### 📦 Agent 2 — Data Fetcher
-- Uses **Apify** for OHLCV data  
-- Falls back to **Binance API (free)**  
+- `direction`
+- `up_prob`
+- `confidence`
+- `forecast_close`
+- `forecast_delta_pct`
 
----
+## Project layout
 
-### 🔮 Agent 3 — Predictor
-- Multi-feature ML model:
-  - RSI, MACD, Bollinger Bands  
-  - Multi-scale returns  
-- Outputs:
-  - Direction (UP/DOWN)
-  - Probability
-  - Confidence  
+- [run_pipeline.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/run_pipeline.py): main orchestrator
+- [agents/agent1_market_scanner.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/agents/agent1_market_scanner.py): Polymarket + Kalshi market search
+- [agents/agent2_data_fetcher_apify_tracking.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/agents/agent2_data_fetcher_apify_tracking.py): Apify/Binance OHLCV fetcher
+- [agents/agent3_predictor.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/agents/agent3_predictor.py): Kronos prediction agent
+- [agents/agent4_risk_manager.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/agents/agent4_risk_manager.py): Kelly sizing
+- [agents/agent5_feedback_loop.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/agents/agent5_feedback_loop.py): feedback loop and arbitrage
+- [tools/hermes_tools.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/tools/hermes_tools.py): Hermes Agent wrapper
+- [tools/kronos_tools.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/tools/kronos_tools.py): Kronos backend integration
+- [utils/state_store.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/utils/state_store.py): persistent bankroll and prediction history
+- [dashboard.py](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/dashboard.py): Streamlit visibility layer
 
----
+## Setup
 
-### 💰 Agent 4 — Risk Manager
-- Uses **Kelly Criterion**
-- Applies:
-  - Fractional Kelly  
-  - Max 5% risk cap  
-  - Edge filtering  
-
----
-
-### 📊 Agent 5 — Feedback Loop
-- Tracks accuracy  
-- Updates bankroll  
-- Detects arbitrage opportunities  
-
----
-
-## 🤖 LLM Synthesis Layer
-
-From your pipeline :contentReference[oaicite:1]{index=1}:
-
-👉 Converts raw outputs into **human-readable trading insights**
-
-```
-"BTC shows bullish bias with 0.63 probability.
-Recommended small position due to moderate confidence.
-No strong arbitrage detected."
-```
-
----
-
-## 📊 Live Dashboard
-
-Run:
-
-```bash
-streamlit run dashboard.py
-```
-
-From your dashboard :contentReference[oaicite:2]{index=2}:
-
-- 📈 Predictions per asset  
-- 💰 Bankroll tracking  
-- 📊 Accuracy metrics  
-- ⚡ Arbitrage detection  
-- 🧾 Apify cost monitoring  
-
----
-
-## 🚀 Quick Start  
+### 1. Install project dependencies
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env
 ```
 
+### 2. Configure env
+
+Use [.env.example](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/.env.example) as the template.
+
+Required:
+
+- `OPENROUTER_API_KEY`
+- `APIFY_API_TOKEN`
+
+Recommended:
+
+- `KRONOS_REPO_PATH=./third_party/Kronos-master`
+- `HERMES_ENABLED=true`
+
+### 3. Run
+
 ```bash
-# Run pipeline
 python run_pipeline.py
-
-# Run continuously
 python run_pipeline.py --loop
-
-# Run dashboard
 streamlit run dashboard.py
 ```
 
----
+## Notes for submission
 
-## 📂 Project Structure  
+- Do not commit `.env`; it is ignored by [.gitignore](C:/Users/itzan/Documents/Codex/2026-04-24-files-mentioned-by-the-user-crowdwisdom/.gitignore)
+- Include your Apify token usage evidence from `data/apify_usage.jsonl`
+- Record a short demo video showing the pipeline run and dashboard
+- If running Hermes on Windows, show WSL2 or note that Hermes is wired in code and should be run under its supported environment
 
-```
-crowdwisdom-trading/
-├── run_pipeline.py       # Orchestrator
-├── dashboard.py          # Streamlit UI
-├── agents/               # 5-agent system
-├── tools/                # APIs + integrations
-├── utils/                # config + logging
-├── data/                 # predictions + logs
-```
+## Sources
 
----
-
-## 🎯 Key Features  
-
-✔ Multi-agent architecture  
-✔ ML + market consensus fusion  
-✔ Kelly-based risk management  
-✔ LLM-based insights  
-✔ Live dashboard  
-
----
-
-## 🔥 What Makes This Unique  
-
-Most trading bots:
-❌ Use only price data  
-
-This system:
-✅ Combines **market psychology + ML + risk math**
-
----
-
-## 🔮 Future Improvements  
-
-🚀 Real trade execution  
-📊 Advanced ML models (XGBoost, LSTM)  
-🧠 Reinforcement learning  
-🌐 Cloud deployment  
-
----
-
-## 💡 Philosophy  
-
-> “Markets are not just data —  
-> they are collective intelligence.”
-
----
-
-<p align="center">
-  📈 CrowdWisdomTrading — Turning Market Signals into Strategy
-</p>
+- [Hermes Agent repo](https://github.com/nousresearch/hermes-agent)
+- [Hermes Python library guide](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/python-library.md)
+- [Kronos repo](https://github.com/shiyu-coder/Kronos)
+- [Apify Python client docs](https://docs.apify.com/api/client/python/docs/overview)
